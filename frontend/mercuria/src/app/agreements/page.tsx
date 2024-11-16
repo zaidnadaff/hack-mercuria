@@ -38,9 +38,12 @@ export default function ProjectAgreementPage() {
     address: "",
     contractYears: "",
   });
-  const [identificationDocument, setIdentificationDocument] = useState<File | null>(null);
+  const [identificationDocument, setIdentificationDocument] =
+    useState<File | null>(null);
   const [landDocument, setLandDocument] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<"idle" | "success" | "error">("idle");
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const [handleClick, setHandleClick] = useState(true);
 
@@ -52,7 +55,10 @@ export default function ProjectAgreementPage() {
   };
 
   // Handle file input for document uploads
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, setFile: (file: File | null) => void) => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFile: (file: File | null) => void
+  ) => {
     if (event.target.files && event.target.files[0]) {
       setFile(event.target.files[0]);
     }
@@ -72,33 +78,35 @@ export default function ProjectAgreementPage() {
     setUploadStatus("idle");
     try {
       await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulating upload time
-    // Prepare form data for submission
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("phoneNumber", formData.phoneNumber);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("contractYears", formData.contractYears);
-    formDataToSend.append("identificationDocument", identificationDocument);
-    formDataToSend.append("landDocument", landDocument);
+      // Prepare form data for submission
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("phoneNumber", formData.phoneNumber);
+      formDataToSend.append("address", formData.address);
+      formDataToSend.append("contractYears", formData.contractYears);
+      formDataToSend.append("identificationDocument", identificationDocument);
+      formDataToSend.append("landDocument", landDocument);
 
-    try {
-      setUploadStatus("idle");
-      const response = await axios.post("http://localhost:5000/api/agreement", formDataToSend);
-    
-      console.log(response.data);  // Add this line to check the response
-      if (!response) throw new Error("Error submitting form");
-    
-      setUploadStatus("success");
-      router.push("/capture");
-    } catch (error) {
-      console.error('Error:', error); // Add this line to check the error
-      setUploadStatus("error");
+      try {
+        setUploadStatus("idle");
+        const response = await axios.post(
+          "http://localhost:5000/api/agreement",
+          formDataToSend
+        );
+
+        console.log(response.data); // Add this line to check the response
+        if (!response) throw new Error("Error submitting form");
+
+        setUploadStatus("success");
+        router.push("/capture");
+      } catch (error) {
+        console.error("Error:", error); // Add this line to check the error
+        setUploadStatus("error");
+      }
+    } catch (err) {
+      console.log(err);
     }
-  }
-  catch(err) {
-    console.log(err);
-  }
-}
+  };
 
   if (!isSignedIn) {
     return (
@@ -106,7 +114,9 @@ export default function ProjectAgreementPage() {
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Access Denied</CardTitle>
-            <CardDescription>Please sign in to access this page.</CardDescription>
+            <CardDescription>
+              Please sign in to access this page.
+            </CardDescription>
           </CardHeader>
           <CardFooter>
             <Button className="w-full" onClick={() => router.push("/")}>
@@ -133,24 +143,46 @@ export default function ProjectAgreementPage() {
             {/* Full Name Field */}
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
+              <Input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
             </div>
             {/* Phone Number Field */}
             <div className="space-y-2">
               <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input id="phoneNumber" name="phoneNumber" type="tel" value={formData.phoneNumber} onChange={handleInputChange} required />
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                required
+              />
             </div>
             {/* Address Field */}
             <div className="space-y-2">
               <Label htmlFor="address">Address</Label>
-              <Textarea id="address" name="address" value={formData.address} onChange={handleInputChange} required />
+              <Textarea
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+              />
             </div>
             {/* Contract Duration Field */}
             <div className="space-y-2">
               <Label htmlFor="contractYears">Contract Duration (Years)</Label>
               <Select
                 name="contractYears"
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, contractYears: value }))}>
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, contractYears: value }))
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select contract duration" />
                 </SelectTrigger>
@@ -164,7 +196,9 @@ export default function ProjectAgreementPage() {
             </div>
             {/* Identification Document Upload */}
             <div className="space-y-2">
-              <Label htmlFor="identificationDocument">Identification Document</Label>
+              <Label htmlFor="identificationDocument">
+                Identification Document
+              </Label>
               <Input
                 id="identificationDocument"
                 type="file"
@@ -196,14 +230,7 @@ export default function ProjectAgreementPage() {
                 </p>
               )}
             </div>
-            {handleClick ? (
-              <Button type="submit" className="w-full">
-                <Upload className="w-4 h-4 mr-2" />
-                Submit Agreement
-              </Button>
-            ) : (
-              <Loader size={24} color="black" />
-            )}
+
             {/* Submit Button */}
             <Button type="submit" className="w-full">
               <Upload className="w-4 h-4 mr-2" />
@@ -217,7 +244,9 @@ export default function ProjectAgreementPage() {
         <Alert className="mt-4 bg-green-100 border-green-500">
           <FileCheck className="h-4 w-4" />
           <AlertTitle>Success</AlertTitle>
-          <AlertDescription>Your project agreement has been successfully submitted.</AlertDescription>
+          <AlertDescription>
+            Your project agreement has been successfully submitted.
+          </AlertDescription>
         </Alert>
       )}
       {/* Error Alert */}
@@ -225,7 +254,9 @@ export default function ProjectAgreementPage() {
         <Alert className="mt-4 bg-red-100 border-red-500">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>There was an error submitting your agreement. Please try again.</AlertDescription>
+          <AlertDescription>
+            There was an error submitting your agreement. Please try again.
+          </AlertDescription>
         </Alert>
       )}
     </div>
