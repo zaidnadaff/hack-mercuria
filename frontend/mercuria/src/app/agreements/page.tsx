@@ -35,7 +35,8 @@ export default function ProjectAgreementPage() {
     address: "",
     contractYears: "",
   });
-  const [agreementDocument, setAgreementDocument] = useState<File | null>(null);
+  const [identificationDocument, setIdentificationDocument] =
+    useState<File | null>(null);
   const [landDocument, setLandDocument] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "success" | "error"
@@ -100,7 +101,7 @@ export default function ProjectAgreementPage() {
       <h1 className="text-3xl font-bold mb-6">Project Agreement Upload</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Upload Your Project Agreement</CardTitle>
+          <CardTitle>Upload Details for Project Agreement</CardTitle>
           <CardDescription>
             Please fill in your details and upload the required documents.
           </CardDescription>
@@ -158,18 +159,20 @@ export default function ProjectAgreementPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="agreementDocument">Agreement Document</Label>
+              <Label htmlFor="identificationDocument">
+                Identification Document
+              </Label>
               <Input
-                id="agreementDocument"
+                id="identificationDocument"
                 type="file"
                 accept=".pdf,.doc,.docx"
-                onChange={(e) => handleFileChange(e, setAgreementDocument)}
+                onChange={(e) => handleFileChange(e, setIdentificationDocument)}
                 required
               />
-              {agreementDocument && (
+              {identificationDocument && (
                 <p className="text-sm text-green-600 mt-1 flex items-center">
                   <FileCheck className="w-4 h-4 mr-1" />
-                  {agreementDocument.name}
+                  {identificationDocument.name}
                 </p>
               )}
             </div>
