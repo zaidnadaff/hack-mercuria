@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Upload, FileCheck, AlertTriangle } from "lucide-react";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ProjectAgreementPage() {
   const { isSignedIn, user } = useUser();
@@ -41,6 +42,8 @@ export default function ProjectAgreementPage() {
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+
+  const [handleClick, setHandleClick] = useState(true);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,10 +70,12 @@ export default function ProjectAgreementPage() {
 
     // Here you would typically upload the files and form data to your server
     // For this example, we'll simulate an upload with a timeout
+    setHandleClick(false);
     setUploadStatus("idle");
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulating upload time
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulating upload time
       setUploadStatus("success");
+      router.push("/capture");
     } catch (error) {
       setUploadStatus("error");
     }
@@ -192,10 +197,14 @@ export default function ProjectAgreementPage() {
                 </p>
               )}
             </div>
-            <Button type="submit" className="w-full">
-              <Upload className="w-4 h-4 mr-2" />
-              Submit Agreement
-            </Button>
+            {handleClick ? (
+              <Button type="submit" className="w-full">
+                <Upload className="w-4 h-4 mr-2" />
+                Submit Agreement
+              </Button>
+            ) : (
+              <Loader size={24} color="black" />
+            )}
           </form>
         </CardContent>
       </Card>
